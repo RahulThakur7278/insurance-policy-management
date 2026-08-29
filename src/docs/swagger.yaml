@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: Insurance Policy Management API
+  description: Production-grade REST API for managing insurance policies.
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: Current Environment
+  - url: /
+    description: Root Environment (Health)
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      description: Returns the health status and uptime of the API.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  uptime:
+                    type: number
+                  timestamp:
+                    type: string
+                    format: date-time
+
+  /upload:
+    post:
+      tags:
+        - Data Management
+      summary: Upload XLSX/CSV file
+      description: Uploads and parses an XLSX or CSV file to bulk-upsert into MongoDB collections.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: File uploaded and data inserted successfully.
+                  data:
+                    type: object
+                    properties:
+                      totalRowsParsed:
+                        type: integer
+                      agents:
+                        type: integer
+                      users:
+                        type: integer
+                      accounts:
+                        type: integer
+                      categories:
+                        type: integer
+                      carriers:
+                        type: integer
+                      policies:
+                        type: integer
+
+  /policies/search:
+    get:
+      tags:
+        - Data Management
+      summary: Search policies by username
+      description: Retrieve paginated policies associated with a specific username.
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: true
+          description: User's first name to search for
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          required: false
+      responses:
+        "200":
+          description: OK
+
+  /policies/aggregated:
+    get:
+      tags:
+        - Data Management
+      summary: Aggregated policies per user
+      description: Retrieve a list of users along with an array of their associated policies.
+      responses:
+        "200":
+          description: OK
+
+  /system/cpu:
+    get:
+      tags:
+        - System Services
+      summary: Real-time CPU Stats
+      description: Get the current CPU usage percentage of the server.
+      responses:
+        "200":
+          description: OK
+
+  /messages/schedule:
+    post:
+      tags:
+        - System Services
+      summary: Schedule a message
+      description: Schedule a message to be delivered at a specific day and time.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - message
+                - day
+                - time
+              properties:
+                message:
+                  type: string
+                  example: Team standup reminder
+                day:
+                  type: string
+                  enum: [sunday, monday, tuesday, wednesday, thursday, friday, saturday]
+                  example: monday
+                time:
+                  type: string
+                  example: "09:00"
+      responses:
+        "201":
+          description: Created
+    get:
+      tags:
+        - System Services
+      summary: List scheduled messages
+      description: Get paginated scheduled messages, filterable by delivery status.
+      parameters:
+        - in: query
+          name: isDelivered
+          schema:
+            type: boolean
+          required: false
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          required: false
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+          required: false
+      responses:
+        "200":
+          description: OK
