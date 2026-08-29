@@ -19,6 +19,8 @@ const path = require('path');
 const logger = require('./config/logger');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler.middleware');
 const apiRoutes = require('./routes');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
 
 const app = express();
 
@@ -54,6 +56,10 @@ app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.get('/health', (_req, res) => {
   res.json({ status: 'ok', uptime: process.uptime(), timestamp: new Date() });
 });
+
+// ─── API Documentation ───────────────────────────────────────────────────────
+const swaggerDocument = YAML.load(path.join(__dirname, 'docs', 'swagger.yaml'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // ─── API Routes ───────────────────────────────────────────────────────────────
 app.use('/api/v1', apiRoutes);
