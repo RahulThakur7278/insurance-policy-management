@@ -1,0 +1,6 @@
+agent_name,first_name,dob,address,phone,state,zip_code,email,gender,user_type,account_name,category_name,company_name,policy_number,policy_start_date,policy_end_date
+"Agent Smith","Alice","1990-05-15","123 Maple Street","555-0101","CA","90210","alice@example.com","female","standard","Alice Personal","Auto","StateFarm","POL-1001","2023-01-01","2024-01-01"
+"Agent Smith","Alice","1990-05-15","123 Maple Street","555-0101","CA","90210","alice@example.com","female","standard","Alice Personal","Home","StateFarm","POL-1002","2023-06-15","2024-06-15"
+"Agent Jones","Bob","1985-11-20","456 Oak Avenue","555-0202","NY","10001","bob@example.com","male","premium","Bob Business","Life","MetLife","POL-2001","2022-04-10","2032-04-10"
+"Agent Davis","Charlie","1978-02-28","789 Pine Road","555-0303","TX","73301","charlie@example.com","male","standard","Charlie Family","Health","BlueCross","POL-3001","2023-08-01","2024-08-01"
+"Agent Smith","Diana","1995-09-05","321 Elm Blvd","555-0404","FL","33101","diana@example.com","female","guest","Diana Renter","Renter","Geico","POL-4001","2023-10-20","2024-10-20"

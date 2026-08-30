@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
  * Multer v2 fileFilter – called with (req, file) and returns a Promise<boolean>.
  * Returning false rejects the file; throwing rejects with an error.
  */
-const fileFilter = async (_req, file) => {
+const fileFilter = (_req, file, cb) => {
   const ALLOWED_MIMES = [
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     'application/vnd.ms-excel',
@@ -37,9 +37,9 @@ const fileFilter = async (_req, file) => {
   const ext = path.extname(file.originalname).toLowerCase();
   const allowed = ALLOWED_MIMES.includes(file.mimetype) || ['.xlsx', '.xls', '.csv'].includes(ext);
   if (!allowed) {
-    throw new AppError('Only XLSX/XLS/CSV files are allowed.', StatusCodes.BAD_REQUEST);
+    return cb(new AppError('Only XLSX/XLS/CSV files are allowed.', StatusCodes.BAD_REQUEST));
   }
-  return true;
+  return cb(null, true);
 };
 
 const MAX_FILE_SIZE_MB = parseInt(process.env.MAX_FILE_SIZE_MB || '50', 10);
