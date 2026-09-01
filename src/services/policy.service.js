@@ -82,7 +82,7 @@ async function getAggregatedPoliciesByUser() {
         as: 'user',
       },
     },
-    { $unwind: { path: '$user', preserveNullAndEmpty: false } },
+    { $unwind: { path: '$user', preserveNullAndEmptyArrays: false } },
     {
       $lookup: {
         from: 'categories',
